@@ -11,10 +11,10 @@ namespace net_il_mio_fotoalbum.Models
         public string Title { get; set; }
         [StringLength(250)]
         public string? Description { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Campo obbligatorio!")]
         [IsAnImgValidation]
         public IFormFile Img { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Campo obbligatorio!")]
         public bool Visibile { get; set; }
         public List<Category>? AllCategories { get; set; }
         public List<int>? SelectedCategories { get; set; }

@@ -6,6 +6,10 @@ namespace net_il_mio_fotoalbum.Models
     {
         protected override ValidationResult? IsValid(object value, ValidationContext validationContext)
         {
+            if(value == null)
+            {
+                return new ValidationResult("Nessun file caricato");
+            }
             IFormFile img = (IFormFile)value;
             int index = img.FileName.LastIndexOf('.');
             string ext = img.FileName.Substring(index + 1);
