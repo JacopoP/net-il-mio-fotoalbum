@@ -1,7 +1,7 @@
 ﻿@model PhotoFormModel;
 
 <div class="container">
-    <form asp-controller="Photo" asp-action="AddPhoto" method="post" enctype="multipart/form-data">
+    <form asp-controller="Photo" asp-action="@(Model.Id == null ? "AddPhoto" : "UpdatePhoto")" asp-route-id="@(Model.Id != null ? Model.Id : "")" method="post" enctype="multipart/form-data">
         @Html.AntiForgeryToken()
         <label class="form-label" for="title_">Titolo della foto</label>
         <input class="form-control" type="text" asp-for="Title" id="title_" />
@@ -21,9 +21,9 @@
         <div>Categorie della foto</div>
         @foreach(Category c in Model.AllCategories)
         {
-            <input type="checkbox" value="@c.Id" name="SelectedCategories" id="@c.Name" />
+            <input type="checkbox" value="@c.Id" name="SelectedCategories" id="@c.Name" checked="@Model.SelectedCategories.Contains(c.Id)" />
             <label class="form-control" for="@c.Name">@c.Name</label>
         }
-        <input type="submit" value="Salva la foto"/>
+        <input type="submit" value="@(Model.Id == null ? "Salva la foto" : "Aggiorna la foto")"/>
     </form>
 </div>

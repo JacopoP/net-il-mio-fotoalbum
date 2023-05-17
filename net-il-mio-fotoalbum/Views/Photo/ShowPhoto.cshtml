@@ -1,0 +1,17 @@
+﻿@model Photo
+
+<div class="container">
+    <h1>@Model.Title</h1>
+    @if(Model.categories != null)
+    {
+        <h2>
+            @foreach(var c in Model.categories)
+            {
+                Write("#" + c.Name);
+                @(Model.categories.IndexOf(c) != Model.categories.Count() - 1 ? ", " : "")
+            }
+        </h2>
+    }
+    <img src="~/img/@Model.Img"/>
+    <p>@Model.Description</p>
+</div>

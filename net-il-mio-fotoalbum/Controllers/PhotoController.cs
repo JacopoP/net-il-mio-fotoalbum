@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using net_il_mio_fotoalbum.Helper;
 using net_il_mio_fotoalbum.Models;
 
@@ -19,6 +20,7 @@ namespace net_il_mio_fotoalbum.Controllers
         {
             return View();
         }
+
         [Authorize]
         [HttpGet]
         public IActionResult Index()
@@ -26,6 +28,17 @@ namespace net_il_mio_fotoalbum.Controllers
             List<Photo>? photos = _database.photos.ToList();
             return View(photos);
         }
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult ShowPhoto(int id) 
+        {
+            Photo p = _database.photos.Include(p =>p.categories).FirstOrDefault(p => p.Id == id);
+            if(p == null)
+                return NotFound();
+            return View(p);
+        }
+
         [Authorize(Roles = "ADMIN")]
         [HttpGet]
         public IActionResult CreateForm()
@@ -34,6 +47,7 @@ namespace net_il_mio_fotoalbum.Controllers
             model.AllCategories = _database.categories.ToList();
             return View("PizzaForm", model);
         }
+
         [Authorize(Roles = "ADMIN")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -59,6 +73,75 @@ namespace net_il_mio_fotoalbum.Controllers
                 }
             }
             _database.photos.Add(p);
+            _database.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "ADMIN")]
+        public IActionResult DeletePhoto(int id)
+        {
+            Photo p = _database.photos.FirstOrDefault(x => x.Id == id);
+            ImgHelper.DeletePhoto(p.Img);
+            _database.Remove(p);
+            _database.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        [Authorize(Roles = "ADMIN")]
+        [HttpGet]
+        public IActionResult EditPhoto(int id)
+        {
+            Photo p = _database.photos.Include(x => x.categories).FirstOrDefault(x => x.Id == id);
+            if(p == null)
+                return NotFound();
+            PhotoFormModel model = new PhotoFormModel();
+            model.Id = p.Id;
+            model.Title = p.Title;
+            model.Description = p.Description;
+            if(p.categories != null)
+                foreach(Category c in p.categories)
+                {
+                    model.SelectedCategories.Add(c.Id);
+                }
+            model.AllCategories = _database.categories.ToList();
+            return View("PizzaForm", model);
+        }
+
+        [Authorize(Roles = "ADMIN")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdatePhoto(int id, PhotoFormModel data)
+        {
+            ModelState.Remove("Img");
+            if (!ModelState.IsValid)
+            {
+                PhotoFormModel model = data;
+                model.Id = id;
+                model.AllCategories = _database.categories.ToList();
+                return View("PizzaForm", model);
+            }
+            Photo p = _database.photos.Include(x => x.categories).FirstOrDefault(x => x.Id == id);
+            if(p == null)
+                return NotFound();
+            p.Title = data.Title;
+            p.Description = data.Description;
+            p.Visibile = data.Visibile;
+            if(data.Img != null)
+            {
+                if (p.Img != null)
+                    ImgHelper.DeletePhoto(p.Img);
+                p.Img = ImgHelper.SavePhoto(data.Img);
+            }
+            if(p.categories == null)
+                p.categories = new List<Category>();
+            else
+                p.categories.Clear();
+            foreach (var i in data.SelectedCategories)
+            {
+                p.categories.Add(_database.categories.FirstOrDefault(x => x.Id == i));
+            }
             _database.SaveChanges();
             return RedirectToAction("Index");
         }
