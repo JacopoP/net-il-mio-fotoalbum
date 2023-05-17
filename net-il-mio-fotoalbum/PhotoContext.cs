@@ -12,11 +12,5 @@ namespace net_il_mio_fotoalbum
 
         public PhotoContext(DbContextOptions<PhotoContext> options) : base(options) { }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=DotNetPhotoAbum;Integrated Security=True; TrustServerCertificate = True");
-        }
-
-        public PhotoContext() { }
     }
 }
