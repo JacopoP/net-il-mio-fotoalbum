@@ -15,7 +15,7 @@ namespace net_il_mio_fotoalbum.Models
         [Required]
         public string Img { get; set; }
         [Required]
-        public bool visibile { get; set; }
+        public bool Visibile { get; set; }
         public List<Category>? categories { get; set; }
     }
 }

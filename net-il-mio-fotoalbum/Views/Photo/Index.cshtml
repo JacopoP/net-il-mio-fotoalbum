@@ -1,2 +1,26 @@
-﻿@{
+﻿@model List<Photo>?
+@{
+    ViewData["Title"] = "Le tue foto";
 }
+
+
+<div class="container">
+    @if(Model != null)
+    {
+        foreach(Photo photo in Model)
+        {
+            if(User.IsInRole("ADMIN") || photo.Visibile)
+            {
+                <div class="card">
+                    <img class="card-image" src="~/img/@photo.Img">
+                    <div class="card-header">@photo.Title</div>
+                    <div class="card-body overflow-hidden">@photo.Description</div>
+                </div>
+            }
+        } 
+    }
+    @if (User.IsInRole("ADMIN"))
+    {
+        <a class="btn btn-light" href="@Url.Action("CreateForm", "Photo")">Aggiungi una nuova foto</a>
+    }
+</div>

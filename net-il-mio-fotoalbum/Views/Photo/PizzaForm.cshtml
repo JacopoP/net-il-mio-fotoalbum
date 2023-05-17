@@ -1,0 +1,29 @@
+﻿@model PhotoFormModel;
+
+<div class="container">
+    <form asp-controller="Photo" asp-action="AddPhoto" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        <label class="form-label" for="title_">Titolo della foto</label>
+        <input class="form-control" type="text" asp-for="Title" id="title_" />
+        <span class="text-danger" asp-validation-for="Title"></span>
+        <label class="form-label" for="description_">Descrizione della foto (facoltativo)</label>
+        <textarea asp-for="Description" id="description_" class="form-text"></textarea>
+        <span class="text-danger" asp-validation-for="Description"></span>
+        <label class="form-label" for="img_">Carica la foto</label>
+        <input class="form-control" type="file" asp-for="Img" id="img_" />
+        <span class="text-danger" asp-validation-for="Img"></span>
+        <div>Visibilità della foto</div>
+        <input type="radio" value="True" name="Visibile" id="visibile_T"/>
+        <label class="form-label" for="visibile_T">Permetti visione</label>
+        <input type="radio" value="False" name="Visibile" id="visibile_F" />
+        <label class="form-label" for="visibile_F">Non permettere la visione</label>
+        <span class="text-danger" asp-validation-for="Visibile"></span>
+        <div>Categorie della foto</div>
+        @foreach(Category c in Model.AllCategories)
+        {
+            <input type="checkbox" value="@c.Id" name="SelectedCategories" id="@c.Name" />
+            <label class="form-control" for="@c.Name">@c.Name</label>
+        }
+        <input type="submit" value="Salva la foto"/>
+    </form>
+</div>
