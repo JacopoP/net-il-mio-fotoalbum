@@ -9,6 +9,7 @@ namespace net_il_mio_fotoalbum
     {
         public DbSet<Photo> photos { get; set; }
         public DbSet<Category> categories { get; set; }
+        public DbSet<Message> messages { get; set; }
 
         public PhotoContext(DbContextOptions<PhotoContext> options) : base(options) { }
 
