@@ -1,0 +1,14 @@
+﻿@model Category
+
+<div class="container">
+    <form asp-action="@(Model == null ? "AddCategory" : "UpdateCategory")" asp-controller="Category" asp-route-id="@(Model != null ? @Model.Id : "")" method="post">
+        @Html.AntiForgeryToken()
+        <label class="form-label" for="Nome_">Nome della categoria</label>
+        <input type="text" asp-for="Name" id="Nome_" class="form-control" />
+        <span class="text-danger" asp-validation-for="Name"></span><br />
+        <label class="form-label" for="Descrizione_">Descizione della categoria</label>
+        <textarea asp-for="Description" id="Nome_" class="form-control"></textarea>
+        <span class="text-danger" asp-validation-for="Description"></span><br />
+        <input type="submit" class="btn btn-light mt-1" value="@(Model == null ? "Salva la categoria" : "Aggiorna la categoria")" />
+    </form>
+</div>

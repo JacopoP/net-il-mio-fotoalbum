@@ -43,7 +43,7 @@ namespace net_il_mio_fotoalbum
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Photo}/{action=Landing}/{id?}");
+                pattern: "{controller=Photo}/{action=Index}/{id?}");
 
             app.MapRazorPages();
 

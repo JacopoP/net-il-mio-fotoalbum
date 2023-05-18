@@ -16,20 +16,12 @@ namespace net_il_mio_fotoalbum.Controllers
         }
 
         [HttpGet]
-        public IActionResult Landing()
-        {
-            return View();
-        }
-
-        [Authorize]
-        [HttpGet]
         public IActionResult Index()
         {
             List<Photo>? photos = _database.photos.ToList();
             return View(photos);
         }
 
-        [Authorize]
         [HttpGet]
         public IActionResult ShowPhoto(int id) 
         {

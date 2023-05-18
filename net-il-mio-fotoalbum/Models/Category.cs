@@ -6,18 +6,14 @@ namespace net_il_mio_fotoalbum.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required]
-        [StringLength(50, MinimumLength = 3)]
+        [Required(ErrorMessage = "Campo obbligatorio!")]
+        [StringLength(50, MinimumLength = 3, ErrorMessage ="Il nome deve essere compreso tra 3 e 50 caratteri")]
         public string Name { get; set; }
-        [Required]
-        [StringLength(150, MinimumLength = 5)]
+        [Required(ErrorMessage = "Campo obbligatorio!")]
+        [StringLength(150, MinimumLength = 5, ErrorMessage = "La descrizione deve essere compresa tra 5 e 150 caratteri")]
         public string Description { get; set; }
-        public List<Photo> Photos { get; set; }
+        public List<Photo>? Photos { get; set; }
 
-        public Category(string name, string description)
-        {
-            Name = name;
-            Description = description;
-        }
+        public Category(){}
     }
 }
