@@ -15,7 +15,7 @@
                     <img class="card-image w-100" style="height: 180px; object-fit: contain;" src="~/img/@photo.Img">
                     <div class="card-header">@photo.Title</div>
                     <div class="card-body overflow-hidden">@photo.Description</div>
-                    <div class="d-flex">
+                    <div class="d-flex justify-content-around px-1 pb-4">
                         <a class="btn btn-primary" href="@Url.Action("ShowPhoto", "Photo", new {id = photo.Id})">S</a>
                         @if (User.IsInRole("ADMIN"))
                         {

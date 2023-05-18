@@ -37,7 +37,7 @@ namespace net_il_mio_fotoalbum.Controllers
         {
             PhotoFormModel model = new PhotoFormModel();
             model.AllCategories = _database.categories.ToList();
-            return View("PizzaForm", model);
+            return View("PhotoForm", model);
         }
 
         [Authorize(Roles = "ADMIN")]
@@ -49,7 +49,7 @@ namespace net_il_mio_fotoalbum.Controllers
             {
                 PhotoFormModel model = data;
                 model.AllCategories = _database.categories.ToList();
-                return View("PizzaForm", model);
+                return View("PhotoForm", model);
             }
             Photo p = new Photo();
             p.Title = data.Title;
@@ -98,7 +98,7 @@ namespace net_il_mio_fotoalbum.Controllers
                     model.SelectedCategories.Add(c.Id);
                 }
             model.AllCategories = _database.categories.ToList();
-            return View("PizzaForm", model);
+            return View("PhotoForm", model);
         }
 
         [Authorize(Roles = "ADMIN")]
@@ -112,7 +112,7 @@ namespace net_il_mio_fotoalbum.Controllers
                 PhotoFormModel model = data;
                 model.Id = id;
                 model.AllCategories = _database.categories.ToList();
-                return View("PizzaForm", model);
+                return View("PhotoForm", model);
             }
             Photo p = _database.photos.Include(x => x.categories).FirstOrDefault(x => x.Id == id);
             if(p == null)

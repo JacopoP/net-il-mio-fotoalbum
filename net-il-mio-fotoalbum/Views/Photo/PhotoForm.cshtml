@@ -5,25 +5,26 @@
         @Html.AntiForgeryToken()
         <label class="form-label" for="title_">Titolo della foto</label>
         <input class="form-control" type="text" asp-for="Title" id="title_" />
-        <span class="text-danger" asp-validation-for="Title"></span>
+        <span class="text-danger" asp-validation-for="Title"></span><br />
         <label class="form-label" for="description_">Descrizione della foto (facoltativo)</label>
-        <textarea asp-for="Description" id="description_" class="form-text"></textarea>
-        <span class="text-danger" asp-validation-for="Description"></span>
+        <textarea asp-for="Description" id="description_" class="form-control"></textarea>
+        <span class="text-danger" asp-validation-for="Description"></span><br />
         <label class="form-label" for="img_">Carica la foto</label>
         <input class="form-control" type="file" asp-for="Img" id="img_" />
-        <span class="text-danger" asp-validation-for="Img"></span>
+        <span class="text-danger" asp-validation-for="Img"></span><br />
         <div>Visibilità della foto</div>
         <input type="radio" value="True" name="Visibile" id="visibile_T" checked/>
         <label class="form-label" for="visibile_T">Permetti visione</label>
         <input type="radio" value="False" name="Visibile" id="visibile_F" />
         <label class="form-label" for="visibile_F">Non permettere la visione</label>
-        <span class="text-danger" asp-validation-for="Visibile"></span>
+        <span class="text-danger" asp-validation-for="Visibile"></span><br />
         <div>Categorie della foto</div>
         @foreach(Category c in Model.AllCategories)
         {
             <input type="checkbox" value="@c.Id" name="SelectedCategories" id="@c.Name" checked="@Model.SelectedCategories.Contains(c.Id)" />
-            <label class="form-control" for="@c.Name">@c.Name</label>
+            <label class="form-label" for="@c.Name">@c.Name&nbsp;&nbsp;</label>
         }
+        <br />
         <input type="submit" value="@(Model.Id == null ? "Salva la foto" : "Aggiorna la foto")"/>
     </form>
 </div>
