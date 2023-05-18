@@ -84,7 +84,7 @@ namespace net_il_mio_fotoalbum.Controllers
             c.Name = data.Name;
             c.Description = data.Description;
             _database.SaveChanges();
-            return RedirectToAction("Index");
+            return Redirect(Url.Action("Index", "Photo"));
         }
     }
 }

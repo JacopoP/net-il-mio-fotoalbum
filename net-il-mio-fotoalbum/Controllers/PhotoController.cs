@@ -142,5 +142,11 @@ namespace net_il_mio_fotoalbum.Controllers
             _database.SaveChanges();
             return RedirectToAction("Index");
         }
+
+        public IActionResult Messages()
+        {
+            List<Message> messages = _database.messages.ToList();
+            return View(messages);
+        }
     }
 }

@@ -1,6 +1,6 @@
 function getPhotos() {
     console.log("ciao");
-    axios.get("https://localhost:7084/api/Api?filter=" + document.getElementById("searchBar").value)
+    axios.get("https://localhost:7084/api/PhotoApi?filter=" + document.getElementById("searchBar").value)
         .then((res) => {
             console.log(res);
             document.getElementById("card-container").innerHTML = "";

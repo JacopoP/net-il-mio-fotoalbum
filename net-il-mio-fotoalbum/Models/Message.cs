@@ -12,5 +12,12 @@ namespace net_il_mio_fotoalbum.Models
         [Required]
         [StringLength(250)]
         public string Text { get; set; }
+
+        public Message(string email, string text)
+        {
+            Email = email;
+            Text = text;
+        }
+        public Message() { }
     }
 }

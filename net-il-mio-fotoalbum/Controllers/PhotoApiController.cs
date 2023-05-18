@@ -1,15 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using net_il_mio_fotoalbum.Models;
 
 namespace net_il_mio_fotoalbum.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ApiController : ControllerBase
-    {
+    public class PhotoApiController : ControllerBase { 
         private PhotoContext _database;
-        public ApiController(PhotoContext database)
+        public PhotoApiController(PhotoContext database)
         {
             _database = database;
         }
@@ -23,15 +22,7 @@ namespace net_il_mio_fotoalbum.Controllers
                 photos = photos.FindAll(x => x.Title.ToLower().Contains(filter.ToLower()));
             }
 
-            return Ok( new { photos, isAdmin = User.IsInRole("ADMIN") });
-        }
-
-        [HttpPost]
-        public IActionResult CreateMessage([FromBody] Message data) 
-        {
-            _database.Add(data);
-            _database.SaveChanges();
-            return Ok();
+            return Ok(new { photos, isAdmin = User.IsInRole("ADMIN") });
         }
     }
 }

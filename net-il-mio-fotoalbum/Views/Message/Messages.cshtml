@@ -1,0 +1,28 @@
+﻿@model List<Message>
+
+<div class="container">
+    @if (Model != null)
+    {
+        <table class="table mb-4">
+            <thead>
+                <tr>
+                    <th scope="col">Email</th>
+                    <th scope="col">Testo</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var c in Model)
+                {
+                    <tr>
+                        <td>@c.Email</td>
+                        <td>@c.Text</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h2 class="text-danger">Non hai messaggi da leggere</h2>
+    }
+</div>
