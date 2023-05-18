@@ -9,9 +9,11 @@
     <link rel="stylesheet" href="~/net_il_mio_fotoalbum.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <main role="main" class="pb-3">
+    <partial name="Header" />
+    <main role="main" class="mb-2" style="margin-top: 100px">
         @RenderBody()
     </main>
+    <partial name="Footer" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
