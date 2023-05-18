@@ -7,11 +7,11 @@ namespace net_il_mio_fotoalbum.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required]
-        [EmailAddress] 
+        [Required(ErrorMessage = "Campo obbligatorio!")]
+        [EmailAddress(ErrorMessage = "Inserisci una email valida")] 
         public string Email { get; set; }
-        [Required]
-        [StringLength(250)]
+        [Required(ErrorMessage = "Campo obbligatorio!")]
+        [StringLength(250, ErrorMessage = "Lunghezza massima della descrizione: 250 caratteri")]
         public string Text { get; set; }
 
         public Message(string email, string text)
@@ -19,8 +19,10 @@ namespace net_il_mio_fotoalbum.Models
             Email = email;
             Text = text;
         }
-        public string UserID { get; set; }
 
-        public IdentityUser User { get; set; }
+        public Message() { }
+        public string? UserID { get; set; }
+
+        public IdentityUser? User { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 
 <div class="container px-5">
     <h3>Mandami un messaggio!</h3>
-    <form asp-action="AddMessage" asp-controller="Message" method="post">
+    <form asp-action="AddMessage" asp-controller="Message" asp-route-i="@ViewData["i"]" method="post">
         <input type="text" class="form-control" asp-for="Email" placeholder="Inserisci qua la tua email" />
         <span class="text-danger" asp-validation-for="Email"></span><br />
         <textarea asp-for="Text" class="form-control" placeholder="Scrivi qua il messaggio" id="messageText"></textarea>

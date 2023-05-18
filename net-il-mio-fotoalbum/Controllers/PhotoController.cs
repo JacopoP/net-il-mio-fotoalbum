@@ -12,12 +12,10 @@ namespace net_il_mio_fotoalbum.Controllers
     public class PhotoController : Controller
     {
         private PhotoContext _database;
-        private readonly UserManager<IdentityUser> _userManager;
 
-        public PhotoController(PhotoContext database, UserManager<IdentityUser> userManager)
+        public PhotoController(PhotoContext database)
         {
             _database = database;
-            _userManager = userManager;
         }
 
         [HttpGet]
@@ -46,7 +44,7 @@ namespace net_il_mio_fotoalbum.Controllers
         [HttpGet]
         public IActionResult ShowPhoto(int id) 
         {
-            Photo p = _database.photos.Include(p =>p.categories).FirstOrDefault(p => p.Id == id);
+            Photo p = _database.photos.Include(p =>p.categories).Include(p=> p.User).FirstOrDefault(p => p.Id == id);
             if(p == null)
                 return NotFound();
             return View(p);

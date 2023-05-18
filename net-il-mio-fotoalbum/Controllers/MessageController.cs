@@ -18,17 +18,19 @@ namespace net_il_mio_fotoalbum.Controllers
             return View("Messages", messages);
         }
         [HttpGet]
-        public IActionResult CreateMessage()
+        public IActionResult CreateMessage(int i)
         {
+            ViewData["i"] = i;
             return View("MessageForm");
         }
         [HttpPost]
-        public ActionResult AddMessage(Message m)
+        public ActionResult AddMessage(int i, Message m)
         {
             if(!ModelState.IsValid)
             {
                 return View("MessageForm", m);
             }
+            m.UserID = _database.photos.FirstOrDefault(x => x.Id == i).UserId;
             _database.messages.Add(m);
             _database.SaveChanges();
             return Redirect(Url.Action("Index", "Photo"));

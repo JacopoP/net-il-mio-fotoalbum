@@ -2,6 +2,7 @@
 
 <div class="container">
     <h1>@Model.Title</h1>
+    <h3>By @Model.User.UserName</h3>
     @if(Model.categories != null)
     {
         <h2>
@@ -12,6 +13,7 @@
             }
         </h2>
     }
-    <img src="~/img/@Model.Img"/>
+    <img class="w-100" style="max-height: 300px; object-fit:contain;" src="~/img/@Model.Img"/>
     <p>@Model.Description</p>
+    <a class="btn btn-light d-block my-3 mx-auto" style="width:fit-content" href="@Url.Action("CreateMessage", "Message", new {i = Model.Id})">Messaggia l'autore'</a>
 </div>
