@@ -4,15 +4,15 @@
 }
 
 
-<div class="container row">
+<div class="container d-flex justify-content-around flex-wrap px-5">
     @if(Model != null)
     {
         foreach(Photo photo in Model)
         {
             if(User.IsInRole("ADMIN") || photo.Visibile)
             {
-                <div class="card col-2">
-                    <img class="card-image" src="~/img/@photo.Img">
+                <div class="card" style="width: 20%; min-width: 200px">
+                    <img class="card-image w-100" style="height: 180px; object-fit: contain;" src="~/img/@photo.Img">
                     <div class="card-header">@photo.Title</div>
                     <div class="card-body overflow-hidden">@photo.Description</div>
                     <div class="d-flex">
@@ -30,8 +30,8 @@
             }
         } 
     }
-    @if (User.IsInRole("ADMIN"))
-    {
-        <a class="btn btn-light" href="@Url.Action("CreateForm", "Photo")">Aggiungi una nuova foto</a>
-    }
 </div>
+@if (User.IsInRole("ADMIN"))
+{
+    <a class="btn btn-light d-block mt-4 mx-auto" href="@Url.Action("CreateForm", "Photo")" style="width: fit-content;">Aggiungi una nuova foto</a>
+}
