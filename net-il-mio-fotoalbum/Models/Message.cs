@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace net_il_mio_fotoalbum.Models
 {
@@ -18,6 +19,8 @@ namespace net_il_mio_fotoalbum.Models
             Email = email;
             Text = text;
         }
-        public Message() { }
+        public string UserID { get; set; }
+
+        public IdentityUser User { get; set; }
     }
 }

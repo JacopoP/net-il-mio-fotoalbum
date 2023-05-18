@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using net_il_mio_fotoalbum.Helper;
 using net_il_mio_fotoalbum.Models;
+using System.Security.Claims;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace net_il_mio_fotoalbum.Controllers
@@ -10,10 +12,12 @@ namespace net_il_mio_fotoalbum.Controllers
     public class PhotoController : Controller
     {
         private PhotoContext _database;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public PhotoController(PhotoContext database)
+        public PhotoController(PhotoContext database, UserManager<IdentityUser> userManager)
         {
             _database = database;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -65,6 +69,7 @@ namespace net_il_mio_fotoalbum.Controllers
                     p.categories.Add(_database.categories.FirstOrDefault(x => x.Id == i));
                 }
             }
+            p.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             _database.photos.Add(p);
             _database.SaveChanges();
             return RedirectToAction("Index");
