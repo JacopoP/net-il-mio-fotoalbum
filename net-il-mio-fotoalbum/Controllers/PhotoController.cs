@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using net_il_mio_fotoalbum.Helper;
 using net_il_mio_fotoalbum.Models;
 using System.Security.Claims;
 using static System.Net.Mime.MediaTypeNames;
@@ -29,7 +28,7 @@ namespace net_il_mio_fotoalbum.Controllers
         [Authorize(Roles = "ADMIN")]
         public IActionResult AdminIndex()
         {
-            List<Photo> photos = _database.photos.Where(x => x.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier)).ToList();
+            List<Photo> photos = _database.photos.Include(x=>x.Image).Where(x => x.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier)).ToList();
             return View(photos);
         }
 
@@ -37,14 +36,14 @@ namespace net_il_mio_fotoalbum.Controllers
         [Authorize(Roles = "SUPERADMIN")]
         public IActionResult SuperadminIndex()
         {
-            List<Photo> photos = _database.photos.ToList();
+            List<Photo> photos = _database.photos.Include(x => x.Image).ToList();
             return View(photos);
         }
 
         [HttpGet]
         public IActionResult ShowPhoto(int id) 
         {
-            Photo p = _database.photos.Include(p =>p.categories).Include(p=> p.User).FirstOrDefault(p => p.Id == id);
+            Photo p = _database.photos.Include(p =>p.categories).Include(p=> p.Image).Include(p=> p.User).FirstOrDefault(p => p.Id == id);
             if(p == null)
                 return NotFound();
             return View(p);
@@ -74,7 +73,7 @@ namespace net_il_mio_fotoalbum.Controllers
             p.Title = data.Title;
             p.Description = data.Description;
             p.Visibile = data.Visibile;
-            p.Img = ImgHelper.SavePhoto(data.Img);
+            p.ImageID = SavePhoto(data.Img);
             if(data.SelectedCategories != null)
             {
                 p.categories = new List<Category>();
@@ -93,10 +92,10 @@ namespace net_il_mio_fotoalbum.Controllers
         [Authorize(Roles = "ADMIN, SUPERADMIN")]
         public IActionResult DeletePhoto(int id)
         {
-            Photo p = _database.photos.FirstOrDefault(x => x.Id == id);
+            Photo p = _database.photos.Include(x => x.Image).FirstOrDefault(x => x.Id == id);
             if (User.FindFirstValue(ClaimTypes.NameIdentifier) != p.UserId && !User.IsInRole("SUPERADMIN"))
                 return BadRequest();
-            ImgHelper.DeletePhoto(p.Img);
+            DeletePhoto(p.ImageID);
             _database.Remove(p);
             _database.SaveChanges();
             return RedirectToAction("Index");
@@ -145,7 +144,7 @@ namespace net_il_mio_fotoalbum.Controllers
                 model.AllCategories = _database.categories.ToList();
                 return View("PhotoForm", model);
             }
-            Photo p = _database.photos.Include(x => x.categories).FirstOrDefault(x => x.Id == id);
+            Photo p = _database.photos.Include(x => x.categories).Include(x=> x.Image).FirstOrDefault(x => x.Id == id);
             if(p == null)
                 return NotFound();
             if (User.FindFirstValue(ClaimTypes.NameIdentifier) != p.UserId)
@@ -159,9 +158,9 @@ namespace net_il_mio_fotoalbum.Controllers
                 string ext = data.Img.FileName.Substring(index + 1);
                 if (ext == "jpg" || ext == "png" || ext == "svg" || ext == "webp" || ext == "jpeg")
                     {
-                        if (p.Img != null)
-                            ImgHelper.DeletePhoto(p.Img);
-                        p.Img = ImgHelper.SavePhoto(data.Img);
+                        if (p.ImageID != null)
+                            DeletePhoto(p.ImageID);
+                        p.ImageID = SavePhoto(data.Img);
                 }
             }
             if(p.categories == null)
@@ -174,6 +173,26 @@ namespace net_il_mio_fotoalbum.Controllers
             }
             _database.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public int SavePhoto(IFormFile file)
+        {
+            using var ms = new MemoryStream();
+            file.CopyTo(ms);
+            var fileBytes = ms.ToArray();
+            var newImage = new ImageEntry()
+            {
+                Data = fileBytes,
+            };
+            _database.Add(newImage);
+            _database.SaveChanges();
+            return newImage.Id;
+        }
+
+        public void DeletePhoto(int? s)
+        {
+            var im = _database.images.FirstOrDefault(x => x.Id == s);
+            _database.images.Remove(im);
         }
     }
 }

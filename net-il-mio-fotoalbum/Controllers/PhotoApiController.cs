@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using net_il_mio_fotoalbum.Models;
 
 namespace net_il_mio_fotoalbum.Controllers
@@ -16,7 +17,7 @@ namespace net_il_mio_fotoalbum.Controllers
         [HttpGet]
         public IActionResult Index(string? filter)
         {
-            List<Photo> photos = _database.photos.Where(p => User.IsInRole("SUPERADMIN") || p.Visibile).ToList<Photo>();
+            List<Photo> photos = _database.photos.Include(p=>p.Image).Where(p => User.IsInRole("SUPERADMIN") || p.Visibile).ToList<Photo>();
             if (filter != null && filter != String.Empty)
             {
                 photos = photos.FindAll(x => x.Title.ToLower().Contains(filter.ToLower()));

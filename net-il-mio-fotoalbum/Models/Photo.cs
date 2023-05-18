@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace net_il_mio_fotoalbum.Models
 {
@@ -14,7 +15,10 @@ namespace net_il_mio_fotoalbum.Models
         [StringLength(250)]
         public string? Description { get; set; }
         [Required]
-        public string Img { get; set; }
+        public int? ImageID { get; set; }
+
+        public ImageEntry? Image { get; set; }
+        [NotMapped] public string? ImageEntryBase64 => Image == null ? "" : "data:image/jpg;base64," + Convert.ToBase64String(Image.Data);
         [Required]
         public bool Visibile { get; set; }
         public List<Category>? categories { get; set; }

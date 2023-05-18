@@ -3,10 +3,11 @@ function getPhotos() {
     axios.get("https://localhost:7084/api/PhotoApi?filter=" + document.getElementById("searchBar").value)
         .then((res) => {
             document.getElementById("card-containerindex").innerHTML = "";
+            console.log(res);
             res.data.forEach((photo) => {
                 document.getElementById("card-containerindex").innerHTML += `
                     <div class="card" style = "width: 20%; min-width: 200px" >
-                        <img class="card-image w-100" style="height: 180px; object-fit: contain;" src="/img/${photo.img}">
+                        <img class="card-image w-100" style="height: 180px; object-fit: contain;" src="${photo.imageEntryBase64}">
                         <div class="card-header">${photo.title}</div>
                         <div class="card-body overflow-hidden">${photo.description}</div>
                         <div class="d-flex justify-content-around px-1 pb-4">
