@@ -11,7 +11,7 @@ namespace net_il_mio_fotoalbum.Controllers
         {
             _database = database;
         }
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "SUPERADMIN")]
         [HttpGet]
         public IActionResult Index()
         {
@@ -19,7 +19,7 @@ namespace net_il_mio_fotoalbum.Controllers
             return View("CategoryList", model);
         }
 
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "SUPERADMIN")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id) 
@@ -34,14 +34,14 @@ namespace net_il_mio_fotoalbum.Controllers
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "SUPERADMIN")]
         [HttpGet]
         public IActionResult Create()
         {
             return View("CategoryForm");
         }
 
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "SUPERADMIN")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult AddCategory(Category data)
@@ -55,7 +55,7 @@ namespace net_il_mio_fotoalbum.Controllers
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "SUPERADMIN")]
         [HttpGet]
         public IActionResult Edit(int id)
         {
@@ -67,7 +67,7 @@ namespace net_il_mio_fotoalbum.Controllers
             return View("CategoryForm", data);
         }
 
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "SUPERADMIN")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult UpdateCategory(int id, Category data)
@@ -84,7 +84,7 @@ namespace net_il_mio_fotoalbum.Controllers
             c.Name = data.Name;
             c.Description = data.Description;
             _database.SaveChanges();
-            return Redirect(Url.Action("Index", "Photo"));
+            return RedirectToAction("Index");
         }
     }
 }

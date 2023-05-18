@@ -28,6 +28,22 @@ namespace net_il_mio_fotoalbum.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "ADMIN")]
+        public IActionResult AdminIndex()
+        {
+            List<Photo> photos = _database.photos.Where(x => x.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier)).ToList();
+            return View(photos);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "SUPERADMIN")]
+        public IActionResult SuperadminIndex()
+        {
+            List<Photo> photos = _database.photos.ToList();
+            return View(photos);
+        }
+
+        [HttpGet]
         public IActionResult ShowPhoto(int id) 
         {
             Photo p = _database.photos.Include(p =>p.categories).FirstOrDefault(p => p.Id == id);
@@ -76,14 +92,26 @@ namespace net_il_mio_fotoalbum.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "ADMIN, SUPERADMIN")]
         public IActionResult DeletePhoto(int id)
         {
             Photo p = _database.photos.FirstOrDefault(x => x.Id == id);
+            if (User.FindFirstValue(ClaimTypes.NameIdentifier) != p.UserId && !User.IsInRole("SUPERADMIN"))
+                return BadRequest();
             ImgHelper.DeletePhoto(p.Img);
             _database.Remove(p);
             _database.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "SUPERADMIN")]
+        public IActionResult ChangeVisibiltyPhoto(int id)
+        {
+            Photo p = _database.photos.FirstOrDefault(x => x.Id == id);
+            p.Visibile = !p.Visibile;
+            _database.SaveChanges();
+            return RedirectToAction("SuperadminIndex");
         }
 
         [Authorize(Roles = "ADMIN")]
@@ -122,6 +150,8 @@ namespace net_il_mio_fotoalbum.Controllers
             Photo p = _database.photos.Include(x => x.categories).FirstOrDefault(x => x.Id == id);
             if(p == null)
                 return NotFound();
+            if (User.FindFirstValue(ClaimTypes.NameIdentifier) != p.UserId)
+                return BadRequest();
             p.Title = data.Title;
             p.Description = data.Description;
             p.Visibile = data.Visibile;
@@ -146,12 +176,6 @@ namespace net_il_mio_fotoalbum.Controllers
             }
             _database.SaveChanges();
             return RedirectToAction("Index");
-        }
-
-        public IActionResult Messages()
-        {
-            List<Message> messages = _database.messages.ToList();
-            return View(messages);
         }
     }
 }

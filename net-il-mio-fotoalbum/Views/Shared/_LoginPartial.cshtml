@@ -6,12 +6,22 @@
 <ul class="d-flex gx-3 py-0 my-0" style="list-style:none;">
 @if (SignInManager.IsSignedIn(User))
 {
-    <li class="">
-        <a class="nav-link text-dark" href="@Url.Action("Index", "Category")" title="Manage">Gestisci le categorie</a>
-    </li>
-    <li class="">
-        <a class="nav-link text-dark" href="@Url.Action("Index", "Message")"> Vedi i messaggi</a>
-    </li>
+    if(User.IsInRole("ADMIN")){
+        <li class="">
+            <a class="nav-link text-dark" href="@Url.Action("AdminIndex", "Photo")">Le tue foto</a>
+        </li>
+        <li class="">
+            <a class="nav-link text-dark" href="@Url.Action("Index", "Message")">I tuoi messaggi</a>
+        </li>
+    }
+    if(User.IsInRole("SUPERADMIN")){
+        <li class="">
+            <a class="nav-link text-dark" href="@Url.Action("Index", "Category")">Gestisci le categorie</a>
+        </li>
+        <li class="">
+            <a class="nav-link text-dark" href="@Url.Action("SuperadminIndex", "Photo")">Gestisci le foto</a>
+        </li>
+    }
     <li class="">
         <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Ciao @UserManager.GetUserName(User)!</a>
     </li>

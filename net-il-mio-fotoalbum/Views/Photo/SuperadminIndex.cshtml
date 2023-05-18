@@ -1,0 +1,36 @@
+﻿@model List<Photo>?
+@{
+    ViewData["Title"] = "Tutte foto";
+}
+
+<div class="container d-flex justify-content-around flex-wrap px-5 gap-4" id="card-container">
+    @if (Model != null)
+    {
+        foreach (Photo photo in Model)
+        {
+            <div class="card" style="width: 20%; min-width: 200px">
+                <img class="card-image w-100" style="height: 180px; object-fit: contain;" src="~/img/@photo.Img">
+                <div class="card-header">@photo.Title</div>
+                <div class="card-body overflow-hidden">@photo.Description</div>
+                <div class="d-flex justify-content-around px-1 pb-4">
+                    <form asp-action="ChangeVisibiltyPhoto" asp-controller="Photo" method="post" asp-route-id="@photo.Id">
+                        @Html.AntiForgeryToken()
+                        @if (photo.Visibile)
+                        {
+                            <button class="btn btn-primary" type="submit"><i class='fa-regular fa-eye'></i></button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-primary" type="submit"><i class='fa-regular fa-eye-slash'></i></button>
+                        }
+                    </form>
+                    <form asp-action="DeletePhoto" asp-controller="Photo" method="post" asp-route-id="@photo.Id">
+                        @Html.AntiForgeryToken()
+                        <input class="btn btn-danger" type="submit" value="-" />
+                    </form>
+                </div>
+            </div>
+        }
+    }
+</div>
+
