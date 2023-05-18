@@ -6,7 +6,7 @@
         {
             bool b = true;
             uint index = 1;
-            string fileName = file.FileName;
+            string fileName = file.FileName.Replace(" ", "_");
             do
             {
                 if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img", fileName)))

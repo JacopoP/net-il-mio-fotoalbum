@@ -15,14 +15,15 @@ namespace net_il_mio_fotoalbum.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index(string? filter = null)
+        public IActionResult Index(string? filter)
         {
-            List<Photo> photos = _database.photos.Include(p => p.categories).ToList<Photo>();
+            List<Photo> photos = _database.photos.Where(p => User.IsInRole("ADMIN") || p.Visibile).ToList<Photo>();
             if (filter != null && filter != String.Empty)
             {
                 photos = photos.FindAll(x => x.Title.ToLower().Contains(filter.ToLower()));
             }
-            return Ok(photos);
+
+            return Ok( new { photos, isAdmin = User.IsInRole("ADMIN") });
         }
     }
 }

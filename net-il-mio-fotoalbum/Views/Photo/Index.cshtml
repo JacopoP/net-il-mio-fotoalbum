@@ -1,11 +1,11 @@
-﻿@model List<Photo>?
+﻿@*@model List<Photo>?*@
 @{
     ViewData["Title"] = "Le tue foto";
 }
 
-
+<input type="text" placeholder="Cerca immagine per titolo" class="form-control mb-5 w-75 mx-auto" id="searchBar" onkeyup="getPhotos()"/>
 <div class="container d-flex justify-content-around flex-wrap px-5" id="card-container">
-    @if(Model != null)
+    @*@if(Model != null)
     {
         foreach(Photo photo in Model)
         {
@@ -29,7 +29,7 @@
                 </div>
             }
         } 
-    }
+    }*@
 </div>
 @if (User.IsInRole("ADMIN"))
 {

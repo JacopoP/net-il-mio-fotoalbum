@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using net_il_mio_fotoalbum.Helper;
 using net_il_mio_fotoalbum.Models;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace net_il_mio_fotoalbum.Controllers
 {
@@ -18,8 +19,8 @@ namespace net_il_mio_fotoalbum.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            List<Photo>? photos = _database.photos.ToList();
-            return View(photos);
+            //List<Photo>? photos = _database.photos.ToList();
+            return View();
         }
 
         [HttpGet]
@@ -121,9 +122,14 @@ namespace net_il_mio_fotoalbum.Controllers
             p.Visibile = data.Visibile;
             if(data.Img != null)
             {
-                if (p.Img != null)
-                    ImgHelper.DeletePhoto(p.Img);
-                p.Img = ImgHelper.SavePhoto(data.Img);
+                int index = data.Img.FileName.LastIndexOf('.');
+                string ext = data.Img.FileName.Substring(index + 1);
+                if (ext == "jpg" || ext == "png" || ext == "svg" || ext == "webp" || ext == "jpeg")
+                    {
+                        if (p.Img != null)
+                            ImgHelper.DeletePhoto(p.Img);
+                        p.Img = ImgHelper.SavePhoto(data.Img);
+                }
             }
             if(p.categories == null)
                 p.categories = new List<Category>();
