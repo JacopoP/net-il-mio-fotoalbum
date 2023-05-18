@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using net_il_mio_fotoalbum;
 using net_il_mio_fotoalbum.Models;
+using System.Text.Json.Serialization;
 
 namespace net_il_mio_fotoalbum
 {
@@ -17,6 +18,9 @@ namespace net_il_mio_fotoalbum
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<PhotoContext>();
+
+            builder.Services.AddControllers()
+                .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();

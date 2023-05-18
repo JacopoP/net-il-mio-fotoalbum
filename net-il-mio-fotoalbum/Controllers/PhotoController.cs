@@ -70,7 +70,6 @@ namespace net_il_mio_fotoalbum.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [Authorize(Roles = "ADMIN")]
         public IActionResult DeletePhoto(int id)
         {
